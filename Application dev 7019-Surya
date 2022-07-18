@@ -1,0 +1,111 @@
+import pandas as pd
+
+def write_init():
+    df = pd.DataFrame(columns=["Roll", "Name", "Age"])
+    write(df)
+
+def write_add():
+    df = pd.read_csv("Student_Database.csv")
+    write(df)
+
+print("Application developed by 7019 - Surya CS6. Thankyou.")
+
+def write(df):
+    parts = int(input("Enter the total number of students to be included in the database: "))
+    df = pd.read_csv("Student_Database.csv")
+    
+    for _ in range(parts):
+        dp = input("Enter student's Roll number: ")
+        st = input("Enter student's Name {}: ".format(dp))
+        et = input("Enter student's Age {}: ".format(dp))
+        df1 = pd.DataFrame(data=[[dp,st,et]],columns=["Roll", "Name", "Age"])
+        df = pd.concat([df,df1], axis=0)
+    df.index = range(len(df.index))
+    df.to_csv('Student_Database.csv', index=False)
+
+def display():
+    df = pd.read_csv("Student_Database.csv")
+    print(df)
+    
+def delete():
+    df = pd.read_csv("Student_Database.csv")
+    temp= int(input("Press 1 to Delete student's data by Roll Number\nPress 2 to Delete student's data by Name\n"))
+    
+    if temp == 1:
+        df.set_index('Roll', inplace = True)
+        df = df.drop(int(input('Enter the Roll number of the student: ')))
+    
+    elif temp == 2:
+        df.set_index('Name', inplace = True)
+        df = df.drop(input('Enter the Name of the student: '))
+        df.to_csv('Student_Database.csv', index=True)
+        df = pd.read_csv("Student_Database.csv")
+        df.set_index('Roll', inplace = True)
+    
+    else:
+        print('Specified input by the user does NOT exist.')   
+    
+    print(df)
+    df.to_csv('Student_Database.csv', index=True)
+
+def analysis():
+    import csv
+    ages = []
+    
+    with open("Student_Database.csv") as f:
+        reader = csv.reader(f)
+    
+        for row in reader:
+            if row[2] == 'Age':
+                continue
+            else:
+                ages.append(int(row[2]))
+    
+    minm = min(ages)
+    maxm = max(ages)
+    sumages = sum(ages)
+    avg = sumages/len(ages)
+    srt = sorted(ages)
+    temp = (len(ages) - 1) // 2
+    
+    if len(ages) % 2 != 0:
+        median = srt[temp]
+    else:
+        median = (srt[temp] + srt[temp + 1])/2
+        
+    
+    with open("Student_Database.csv") as f:
+        reader = csv.reader(f)
+    
+        print("The following are Yongest student(s): ")
+        for row in reader:
+            if row[2] == str(minm):
+                print(row)
+    
+    with open("Student_Database.csv") as f:
+        reader = csv.reader(f)
+        
+        print("The following are Oldest student(s):")
+        for row in reader:
+            if row[2] == str(maxm):
+                print(row)
+        
+    print("Average Age of all the students in the class: ", avg)
+    print("Median Age of the students in the class: ", median)
+    
+df = write_init()
+while True:
+    x=int(input("Press 1 to ADD new student data\nPress 2 to DELETE student data\nPress 3 to DISPLAY the list of students in class\nPress 4 to DISPLAY AGE STATS of the students in the class\nPress 5 To QUIT the Application. "))
+    if x==1:
+        write(df)
+    elif x==2:
+        delete()
+    elif x==3:
+        display()
+    elif x==4:
+        analysis()
+    elif x==5:
+        print("Developed by 7019-Surya")
+        break
+    else:
+        print("Specified data input by the user is Invalid.")
