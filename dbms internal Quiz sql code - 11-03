@@ -1,1 +1,67 @@
+-- Question 1
+create table emp_details(emp_no number(10) Primary Key, emp_name varchar(30), DOB date, address varchar(30), doj date, mobile_no number(10), salary number(20));
+desc emp_details;
+
+alter table emp_details add dept_no number(10);
+
+alter table emp_details drop column salary;
+
+rename emp_details to Employee;
+desc Employee;
+
+
+--Question 2
+create table BOOK (BOOKID number(10) Primary Key, TITLE varchar(30), PUBLISHERCODE number(10), 
+NO_OF_COPIES number(30));
+
+create table PUBLISHER (PUBLISHERCODE number(10) Primary Key, PUBLISHER_NAME varchar(30), Foreign Key(PUBLISHERCODE) references BOOK);
+
+create table AUTHOR (AUTHORID number(10) Primary Key, AUTHOR_NAME varchar(30));
+
+create table BOOK_AUTHOR (BOOKID number(10), AUTHORID number(10), Primary Key(BOOKID, AUTHORID), Foreign Key(BOOKID) references BOOK);
+
+create table BORROWWER (CARDNO number(10) Primary Key, Name_ varchar(30));
+
+create table BOOK_LOAN (BOOKID number(10), CARDNO number(10), DATEOUT date, DUEDATE date,
+STATUS varchar(30) check (STATUS = 'R' or STATUS = 'T'), 
+Primary Key(BOOKID, CARDNO, DATEOUT), 
+Foreign Key(BOOKID) references BOOK, 
+Foreign Key(CARDNO) references BORROWWER);
+
+drop table AUTHOR;
+
+desc AUTHOR
+
+--Question 3
+
+create table SAILOR(sid number(3) Primary Key, sname varchar(30), rating number(2), age number(2));
+
+create table BOATS(bid number(3) Primary Key, bname varchar(30), colour varchar(10));
+
+create table RESERVES(sid number(3), bid number(3), day date, Primary Key(sid, bid), 
+Foreign Key(sid) references SAILOR, Foreign Key(bid) references BOATS);
+
+
+insert into SAILOR values(150, 'Swaraj', 7, 22);
+insert into SAILOR values(151, 'Swapna', 7, 24);
+insert into SAILOR values(152, 'Sanath', 5, 27);
+
+insert into BOATS values(01, 'sky', 'Grey');
+insert into BOATS values(02, 'earth', 'Brown');
+insert into BOATS values(03, 'fire', 'Red');
+
+insert into RESERVES values(150, 01, '01-feb-2020');
+insert into RESERVES values(150, 02, '03-feb-2020');
+insert into RESERVES values(152, 03, '02-apr-2021');
+insert into RESERVES values(153, 02, '01-feb-2020');
+
+--Sailors who have reserved both a Grey and Brown boat:
+select unique sname, S.sid from SAILOR S, BOATS B, RESERVES R where S.sid = R.sid 
+and B.bid = R.bid and colour='Grey' 
+INTERSECT select unique sname,S.sid from SAILOR S, BOATS B, RESERVES R 
+where S.sid = R.sid and B.bid = R.bid and colour='Brown';
+
+
+
+
 
