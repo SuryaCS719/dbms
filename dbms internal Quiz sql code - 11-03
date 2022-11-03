@@ -28,9 +28,12 @@ Primary Key(BOOKID, CARDNO, DATEOUT),
 Foreign Key(BOOKID) references BOOK, 
 Foreign Key(CARDNO) references BORROWWER);
 
+desc AUTHOR;
+
 drop table AUTHOR;
 
-desc AUTHOR
+desc AUTHOR;
+
 
 --Question 3
 
@@ -60,8 +63,3 @@ select unique sname, S.sid from SAILOR S, BOATS B, RESERVES R where S.sid = R.si
 and B.bid = R.bid and colour='Grey' 
 INTERSECT select unique sname,S.sid from SAILOR S, BOATS B, RESERVES R 
 where S.sid = R.sid and B.bid = R.bid and colour='Brown';
-
-
-
-
-
